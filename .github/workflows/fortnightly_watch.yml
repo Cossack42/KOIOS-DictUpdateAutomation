@@ -40,7 +40,7 @@ jobs:
             WITHDRAWN=$(grep '"change_type": "withdrawn"' logs/change_log.jsonl | tail -n 100 | wc -l | tr -d ' ')
             git commit -m "chore: ISO metadata snapshot $(date +%Y-%m-%d)
 
-Changes: ${ADDED} added, ${MODIFIED} modified, ${WITHDRAWN} withdrawn
-See logs/change_log.jsonl for detail."
+            Changes: ${ADDED} added, ${MODIFIED} modified, ${WITHDRAWN} withdrawn
+            See logs/change_log.jsonl for detail."
             git push
           fi
