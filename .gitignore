@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# Local cron log (large, not needed in repo)
+logs/cron_local.log
+
+# Resources are reference only, not tracked
+resources/

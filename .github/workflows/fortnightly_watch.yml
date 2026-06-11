@@ -1,0 +1,46 @@
+name: ISO Metadata Fortnightly Watch
+
+on:
+  schedule:
+    - cron: '0 6 1,15 * *'   # 1st and 15th of each month at 06:00 UTC
+  workflow_dispatch:           # allow manual trigger from GitHub UI
+
+permissions:
+  contents: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run watcher
+        run: python iso_metadata_watcher.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "KOIOS Bot"
+          git config user.email "koios-bot@users.noreply.github.com"
+          git add data/ logs/
+          if git diff --staged --quiet; then
+            echo "Nothing to commit — no changes this fortnight."
+          else
+            ADDED=$(grep '"change_type": "added"' logs/change_log.jsonl | tail -n 100 | wc -l | tr -d ' ')
+            MODIFIED=$(grep '"change_type": "modified"' logs/change_log.jsonl | tail -n 100 | wc -l | tr -d ' ')
+            WITHDRAWN=$(grep '"change_type": "withdrawn"' logs/change_log.jsonl | tail -n 100 | wc -l | tr -d ' ')
+            git commit -m "chore: ISO metadata snapshot $(date +%Y-%m-%d)
+
+Changes: ${ADDED} added, ${MODIFIED} modified, ${WITHDRAWN} withdrawn
+See logs/change_log.jsonl for detail."
+            git push
+          fi
