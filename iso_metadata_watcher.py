@@ -34,7 +34,7 @@ import requests
 
 # Direct download URL for the ISO Deliverables Metadata CSV.
 # Find it at: https://www.iso.org/open-data.html#iso_deliverables_metadata
-DOWNLOAD_URL = "FILL_IN_DIRECT_CSV_DOWNLOAD_URL"
+DOWNLOAD_URL = "https://isopublicstorageprod.blob.core.windows.net/opendata/_latest/iso_deliverables_metadata/csv/iso_deliverables_metadata.csv"
 
 DATA_DIR  = Path("data")
 DATA_FILE = DATA_DIR / "iso_deliverables_metadata.csv"
